@@ -1,6 +1,5 @@
-import celery
+import celery.contrib.testing.app
 import pytest
-import redis
 import testing.redis
 
 
@@ -11,15 +10,20 @@ def redis_server():
     server.stop()
 
 
-@pytest.fixture('function')
-def eager_celery_app(redis_server):
-    redis_client = redis.Redis(**redis_server.dsn())
-    app = celery.Celery(
+@pytest.fixture('session')
+def celery_test_app(redis_server):
+    dsn = redis_server.dsn()
+    app = celery.contrib.testing.app.TestApp(
         __name__,
-        broker=redis_client,
-        backend='celery_redis_sync.redis_sync.RedisBackend')
-    app.conf.update(task_always_eager=True)
-    app.conf.update(task_eager_propagates=True)
+        backend='celery_redis_sync.redis_sync.SynchronousRedisBackend')
+    app.conf.update(redis_host=dsn['host'])
+    app.conf.update(redis_port=dsn['port'])
+    app.conf.update(redis_db=dsn['db'])
+    # XXX commented for debugging
+    # worker = celery.contrib.testing.worker.start_worker(app)
+    # worker.__enter__()
     with celery.contrib.testing.app.setup_default_app(app):
         app.set_current()
         yield app
+        # XXX cleanup needs to be placed somewhere else
+        # worker.__exit__(None, None, None)

@@ -12,7 +12,7 @@ applications to access, edit and remove stored data.
 Usage
 =====
 
-* Configure the provided backend `SynchronousRedisBackend` as your celery result backend
+* Configure the provided backend ``SynchronousRedisBackend`` as your celery result backend
 
 
 Run tests

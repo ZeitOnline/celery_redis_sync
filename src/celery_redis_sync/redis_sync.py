@@ -25,7 +25,8 @@ class SynchronousRedisBackend(celery.backends.base.KeyValueStoreBackend):
     redis = redis
 
     def __init__(self, url=None, connection_pool=None, *args, **kwargs):
-        super(SynchronousRedisBackend, self).__init__(*args, **kwargs)
+        super(SynchronousRedisBackend, self).__init__(
+            expires_type=int, **kwargs)
         self.url = url
         _get = self.app.conf.get
         if self.redis is None:

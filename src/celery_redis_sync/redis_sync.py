@@ -3,7 +3,19 @@
 
 from kombu.utils.objects import cached_property
 import celery.backends.base
-import redis
+import celery.exceptions
+
+try:
+    import redis
+    from kombu.transport.redis import get_redis_error_classes
+except ImportError:                 # pragma: no cover
+    redis = None                    # noqa
+    get_redis_error_classes = None  # noqa
+
+E_REDIS_MISSING = """
+You need to install the redis library in order to use \
+the Redis result store backend.
+"""
 
 
 class SynchronousRedisBackend(celery.backends.base.KeyValueStoreBackend):
@@ -15,8 +27,11 @@ class SynchronousRedisBackend(celery.backends.base.KeyValueStoreBackend):
     def __init__(self, url=None, connection_pool=None, *args, **kwargs):
         super(SynchronousRedisBackend, self).__init__(*args, **kwargs)
         self.url = url
-
         _get = self.app.conf.get
+        if self.redis is None:
+            raise celery.exceptions.ImproperlyConfigured(
+                E_REDIS_MISSING.strip())
+
         self._ConnectionPool = connection_pool
 
         self.connparams = {

@@ -27,7 +27,6 @@ class SynchronousRedisBackend(celery.backends.base.KeyValueStoreBackend):
     def __init__(self, url=None, connection_pool=None, *args, **kwargs):
         super(SynchronousRedisBackend, self).__init__(
             expires_type=int, **kwargs)
-        self.url = url
         _get = self.app.conf.get
         if self.redis is None:
             raise celery.exceptions.ImproperlyConfigured(
@@ -35,15 +34,18 @@ class SynchronousRedisBackend(celery.backends.base.KeyValueStoreBackend):
 
         self._ConnectionPool = connection_pool
 
+        max_connections = _get('redis_max_connections')
+        socket_timeout = _get('redis_socket_timeout')
+        socket_connect_timeout = _get('redis_socket_connect_timeout')
+
         self.connparams = {
             'host': _get('redis_host') or 'localhost',
             'port': _get('redis_port') or 6379,
             'db': _get('redis_db') or 0,
-            # 'password': _get('redis_password'),
-            # 'max_connections': self.max_connections,
-            # 'socket_timeout': socket_timeout and float(socket_timeout),
-            # 'socket_connect_timeout':
-            #    socket_connect_timeout and float(socket_connect_timeout),
+            'max_connections': max_connections,
+            'socket_timeout': socket_timeout and float(socket_timeout),
+            'socket_connect_timeout':
+                socket_connect_timeout and float(socket_connect_timeout),
         }
 
     def _create_client(self, **params):

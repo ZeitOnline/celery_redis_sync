@@ -1,79 +1,21 @@
-# -*- coding: utf-8 -*-
-"""Synchronous Redis result store backend."""
-
-from kombu.utils.objects import cached_property
 import celery.backends.base
-import celery.exceptions
-
-try:
-    import redis
-    from kombu.transport.redis import get_redis_error_classes
-except ImportError:                 # pragma: no cover
-    redis = None                    # noqa
-    get_redis_error_classes = None  # noqa
-
-E_REDIS_MISSING = """
-You need to install the redis library in order to use \
-the Redis result store backend.
-"""
+import celery.backends.redis
 
 
-class SynchronousRedisBackend(celery.backends.base.KeyValueStoreBackend):
+class SynchronousRedisBackend(
+        celery.backends.base.SyncBackendMixin,
+        celery.backends.redis.RedisBackend):
     """Synchronous Redis result backend."""
 
-    #: :pypi:`redis` client module.
-    redis = redis
+    def ResultConsumer(self, *args, **kw):
+        return None
 
-    def __init__(self, url=None, connection_pool=None, *args, **kwargs):
-        super(SynchronousRedisBackend, self).__init__(
-            expires_type=int, **kwargs)
-        _get = self.app.conf.get
-        if self.redis is None:
-            raise celery.exceptions.ImproperlyConfigured(
-                E_REDIS_MISSING.strip())
+    def on_task_call(self, *args, **kw):
+        pass
 
-        self._ConnectionPool = connection_pool
-
-        max_connections = _get('redis_max_connections')
-        socket_timeout = _get('redis_socket_timeout')
-        socket_connect_timeout = _get('redis_socket_connect_timeout')
-
-        self.connparams = {
-            'host': _get('redis_host') or 'localhost',
-            'port': _get('redis_port') or 6379,
-            'db': _get('redis_db') or 0,
-            'max_connections': max_connections,
-            'socket_timeout': socket_timeout and float(socket_timeout),
-            'socket_connect_timeout':
-                socket_connect_timeout and float(socket_connect_timeout),
-        }
-
-    def _create_client(self, **params):
-        return self.redis.StrictRedis(
-            connection_pool=self.ConnectionPool(**params),
-        )
-
-    @property
-    def ConnectionPool(self):
-        if self._ConnectionPool is None:
-            self._ConnectionPool = self.redis.ConnectionPool
-        return self._ConnectionPool
-
-    @cached_property
-    def client(self):
-        return self._create_client(**self.connparams)
-
-    def get(self, key):
-        return self.client.get(key)
-
-    def mget(self, keys):
-        return self.client.get_multi(keys)
-
-    def set(self, key, value):
-        return self.client.set(key, value, self.expires)
-
-    def delete(self, key):
-        return self.client.delete(key)
-
-    def incr(self, key):
-        return self.client.incr(key)
+    def _set(self, key, value):
+        # We omit the self.client.publish() call.
+        if self.expires:
+            self.client.setex(key, self.expires, value)
+        else:
+            self.client.set(key, value)

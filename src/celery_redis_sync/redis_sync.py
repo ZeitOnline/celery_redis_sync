@@ -2,6 +2,18 @@ import celery.backends.base
 import celery.backends.redis
 
 
+def select_backend(**kw):
+    """Override the built-in redis:// backend URL to also support redis+sync://
+    """
+    url = kw.get('url', '')
+    # See celery.app.backends.by_url
+    if url.startswith('sync'):
+        cls = SynchronousRedisBackend
+    else:
+        cls = celery.backends.redis.RedisBackend
+    return cls(**kw)
+
+
 class SynchronousRedisBackend(
         celery.backends.base.SyncBackendMixin,
         celery.backends.redis.RedisBackend):

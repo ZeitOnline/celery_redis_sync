@@ -24,8 +24,8 @@ setup(
         'testing.redis',
     ]},
     entry_points={
-        'console_scripts': [
-            # 'binary-name = celery_redis_sync.module:function'
+        'celery.result_backends': [
+            'redis = celery_redis_sync.redis_sync:select_backend'
         ],
     }
 )

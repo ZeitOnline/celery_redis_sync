@@ -12,15 +12,12 @@ def redis_server():
 
 @pytest.fixture('session')
 def celery_test_app(redis_server):
-    app = celery.contrib.testing.app.TestApp(__name__)
+    app = celery.contrib.testing.app.TestApp(__name__, set_as_current=True)
     app.conf['result_backend'] = 'redis+sync://{host}:{port}/{db}'.format(
         **redis_server.dsn())
-    worker = celery.contrib.testing.worker.start_worker(app)
-    worker.__enter__()
-    with celery.contrib.testing.app.setup_default_app(app):
-        app.set_current()
+    with celery.contrib.testing.app.setup_default_app(app), \
+            celery.contrib.testing.worker.start_worker(app):
         yield app
-        worker.__exit__(None, None, None)
 
 
 # celery.contrib.testing.worker expects a 'ping' task, so it can check that the

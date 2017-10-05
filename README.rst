@@ -4,9 +4,10 @@ celery_redis_sync
 
 Synchronous Redis result store backend.
 
-This may be of use when utilizing a redis result backend as a simple data store
-without establishing a Pub/Sub connection, thus providing multiple, independent
-applications to access, edit and remove stored data.
+This fixes the issue that the redis publish/subscribe channels are currently
+not removed properly by the default (asynchronous) redis backend, see
+https://github.com/celery/celery/issues/3812. (Our "solution" is to never
+create any channels in the first place.)
 
 
 Usage

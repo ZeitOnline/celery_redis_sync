@@ -29,5 +29,12 @@ setup(
         'celery.result_backends': [
             'redis = celery_redis_sync.redis_sync:select_backend'
         ],
-    }
+    },
+    classifiers=[
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+    ],
 )

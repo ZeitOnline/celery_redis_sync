@@ -21,7 +21,6 @@ setup(
         'setuptools',
     ],
     extras_require={'test': [
-        'mock',
         'pytest',
         'testing.redis',
     ]},

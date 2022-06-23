@@ -1,4 +1,5 @@
 import celery.contrib.testing.app
+import celery.contrib.testing.worker
 import pytest
 import testing.redis
 
@@ -10,7 +11,7 @@ def redis_server():
     server.stop()
 
 
-@pytest.fixture('session')
+@pytest.fixture(scope='session')
 def celery_test_app(redis_server):
     app = celery.contrib.testing.app.TestApp(__name__, set_as_current=True)
     app.conf['result_backend'] = 'redis+sync://{host}:{port}/{db}'.format(

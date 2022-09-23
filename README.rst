@@ -14,7 +14,7 @@ Usage
 =====
 
 Make sure the ``celery_redis_sync`` module is importable, and then simply
-specify a ``redis+sync://`` URL in your celery configuration ``result_backend``
+specify a ``redis+sync://`` or ``rediss+sync://`` URL in your celery configuration ``result_backend``
 setting instead of the built-in ``redis://`` URL scheme.
 
 

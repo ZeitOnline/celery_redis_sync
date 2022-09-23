@@ -4,7 +4,7 @@ celery_redis_sync
 1.1.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Also register for `rediss+sync://` URL
 
 
 1.0.1 (2019-11-28)

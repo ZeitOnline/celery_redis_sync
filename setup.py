@@ -26,8 +26,8 @@ setup(
     ]},
     entry_points={
         'celery.result_backends': [
-            'redis = celery_redis_sync.redis_sync:select_backend',
-            'rediss = celery_redis_sync.redis_sync:select_backend',
+            'redis = celery_redis_sync.redis_sync:redis_backend',
+            'rediss = celery_redis_sync.redis_sync:rediss_backend',
         ],
     },
     classifiers=[

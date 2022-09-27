@@ -1,7 +1,7 @@
 celery_redis_sync
 =================
 
-1.2.0 (unreleased)
+1.1.1 (2022-09-27)
 ------------------
 
 - Properly pass through SSL parameters for `rediss`

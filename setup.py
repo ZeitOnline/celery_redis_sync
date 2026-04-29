@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name='celery_redis_sync',
     version='1.2.0.dev0',
-    author='Zeit Online',
+    author='Die ZEIT Online Engineering',
     author_email='zon-backend@zeit.de',
     url='https://github.com/zeitonline/celery_redis_sync',
     description="Synchronous Redis result store backend",

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='celery_redis_sync',
-    version='1.2.0.dev0',
+    version='1.1.2.dev0',
     author='Die ZEIT Online Engineering',
     author_email='zon-backend@zeit.de',
     url='https://github.com/zeitonline/celery_redis_sync',
@@ -18,7 +18,6 @@ setup(
     install_requires=[
         'celery',
         'redis',
-        'setuptools',
     ],
     extras_require={'test': [
         'pytest',

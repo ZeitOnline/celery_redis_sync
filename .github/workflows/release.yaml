@@ -1,0 +1,18 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    uses: zeitonline/gh-action-workflows/.github/workflows/pypi-release.yaml@b19340fe2799d806acba988c59a2213eb3771971 # 4.10.1
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    secrets: inherit
+    with:
+      slack-channel: C06JB4PMALW # team-content-alerts

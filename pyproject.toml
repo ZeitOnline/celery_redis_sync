@@ -1,0 +1,42 @@
+[project]
+name = "celery_redis_sync"
+description = "Synchronous Redis result store backend"
+version = "1.2.0.dev0"
+
+dependencies = [
+    "celery >= 5.0.0.dev0",
+    "redis",
+]
+
+authors = [{name="DIE ZEIT", email="engineering@zeit.de"}]
+license = {text="BSD-3-Clause"}
+urls = {repository="https://github.com/ZeitOnline/celery_redis_sync"}
+requires-python = ">=3.7"
+
+dynamic = ["readme"]
+
+[project.entry-points."celery.result_backends"]
+redis = "celery_redis_sync.redis_sync:redis_backend"
+rediss = "celery_redis_sync.redis_sync:rediss_backend"
+
+[dependency-groups]
+dev = ["pytest", "testing.redis"]
+
+
+[build-system]
+requires = ["hatchling", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build]
+exclude = ["/bin"]
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+fragments = [{path="README.md"}, {text="\n\n"}, {path="CHANGES.md"}]
+
+
+[tool.pytest.ini_options]
+addopts = "--tb=native"

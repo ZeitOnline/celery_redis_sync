@@ -1,6 +1,4 @@
-=================
-celery_redis_sync
-=================
+# celery_redis_sync
 
 Synchronous Redis result store backend.
 
@@ -10,16 +8,14 @@ https://github.com/celery/celery/issues/3812. (Our "solution" is to never
 create any channels in the first place.)
 
 
-Usage
-=====
+## Usage
 
 Make sure the ``celery_redis_sync`` module is importable, and then simply
 specify a ``redis+sync://`` or ``rediss+sync://`` URL in your celery configuration ``result_backend``
 setting instead of the built-in ``redis://`` URL scheme.
 
 
-Run tests
-=========
+## Run tests
 
 Using `tox`_ and `py.test`_. Maybe install ``tox`` (e.g. via ``pip install tox``)
 and then simply run ``tox``.

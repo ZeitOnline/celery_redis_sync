@@ -57,6 +57,6 @@ class SynchronousRedisBackend(
             expires = self.expires
         # We omit the self.client.publish() call.
         if expires:
-            self.client.setex(key, expires, value)
+            self.client.set(key, value, ex=expires)
         else:
             self.client.set(key, value)

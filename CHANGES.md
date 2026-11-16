@@ -1,0 +1,30 @@
+# Changelog
+
+# 1.2.0 (unreleased)
+
+- Nothing changed yet.
+
+
+# 1.1.2 (2026-07-27)
+
+- Remove unused `setuptools` dependency
+
+
+# 1.1.1 (2022-09-27)
+
+- Properly pass through SSL parameters for `rediss`
+
+
+# 1.1.0 (2022-09-23)
+
+- Also register for `rediss+sync://` URL
+
+
+# 1.0.1 (2019-11-28)
+
+- Declare Python-3 compatibility
+
+
+# 1.0.0 (2017-10-05)
+
+- Initial release

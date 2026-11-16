@@ -1,0 +1,25 @@
+name: Testrunner
+
+on:
+  pull_request:
+
+jobs:
+  lint:
+    uses: zeitonline/gh-action-workflows/.github/workflows/lefthook.yaml@b19340fe2799d806acba988c59a2213eb3771971 # 4.10.1
+    with:
+      python-version: "3.14"
+      setup-command: bin/build lefthook
+      baseproject-name: pypi-oss
+      baseproject-environment: production
+
+  test:
+    needs:
+      - lint
+    runs-on: zon-ubuntu-general-dind
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+      - run: bin/test

@@ -52,9 +52,11 @@ class SynchronousRedisBackend(
     def on_task_call(self, *args, **kw):
         pass
 
-    def _set(self, key, value):
+    def _set(self, key, value, expires=None):
+        if expires is None:
+            expires = self.expires
         # We omit the self.client.publish() call.
-        if self.expires:
-            self.client.setex(key, self.expires, value)
+        if expires:
+            self.client.setex(key, expires, value)
         else:
             self.client.set(key, value)

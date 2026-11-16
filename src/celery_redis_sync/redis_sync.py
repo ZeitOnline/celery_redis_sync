@@ -25,8 +25,8 @@ def rediss_backend(**kw):
 
 
 class SynchronousRedisBackend(
-        celery.backends.base.SyncBackendMixin,
-        celery.backends.redis.RedisBackend):
+    celery.backends.base.SyncBackendMixin, celery.backends.redis.RedisBackend
+):
     """Synchronous Redis result backend.
 
     This fixes the celery issue that these channels are not removed properly,

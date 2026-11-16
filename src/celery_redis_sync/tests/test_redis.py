@@ -4,7 +4,7 @@ import celery_redis_sync.redis_sync
 
 
 @celery.shared_task
-def test_task():
+def dummy_task():
     return 42
 
 
@@ -23,7 +23,7 @@ def test_ssl_parameters_are_passed_through(celery_test_app):
 
 
 def test_redis_should_execute_task(celery_test_app):
-    res = test_task.delay()
+    res = dummy_task.delay()
     # Need to call get() preventing a race condition, the test being too fast.
     res.get()
     assert res.state == 'SUCCESS'

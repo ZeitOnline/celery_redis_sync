@@ -20,7 +20,7 @@ redis = "celery_redis_sync.redis_sync:redis_backend"
 rediss = "celery_redis_sync.redis_sync:rediss_backend"
 
 [dependency-groups]
-dev = ["pytest", "testing.redis"]
+dev = ["pytest", "testcontainers"]
 lint = ["lefthook", "ruff"]
 
 

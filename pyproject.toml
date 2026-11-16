@@ -21,6 +21,7 @@ rediss = "celery_redis_sync.redis_sync:rediss_backend"
 
 [dependency-groups]
 dev = ["pytest", "testing.redis"]
+lint = ["lefthook", "ruff"]
 
 
 [build-system]
@@ -40,3 +41,18 @@ fragments = [{path="README.md"}, {text="\n\n"}, {path="CHANGES.md"}]
 
 [tool.pytest.ini_options]
 addopts = "--tb=native"
+
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint.isort]
+from-first = true
+lines-after-imports = 2
